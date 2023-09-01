@@ -1,0 +1,5 @@
+
+
+public readonly struct LevelEndSignal
+{
+}
