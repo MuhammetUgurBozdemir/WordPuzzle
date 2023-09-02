@@ -1,5 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
+using Game.Scripts.Controllers;
+using JetBrains.Annotations;
 using Zenject;
 
 public class ApplicationController : IInitializable, IDisposable
@@ -12,16 +14,22 @@ public class ApplicationController : IInitializable, IDisposable
     private readonly LevelModel _levelModel;
     private DiContainer _diContainer;
     private SignalBus _signalBus;
+    private LevelController _levelController;
+    private WordController _wordController;
 
     public ApplicationController(ApplicationSettings settings,
         LevelModel levelModel,
         DiContainer diContainer,
-        SignalBus signalBus)
+        SignalBus signalBus,
+        LevelController levelController,
+        WordController wordController)
     {
         _settings = settings;
         _levelModel = levelModel;
         _diContainer = diContainer;
         _signalBus = signalBus;
+        _levelController = levelController;
+        _wordController = wordController;
     }
 
     #endregion
@@ -29,15 +37,15 @@ public class ApplicationController : IInitializable, IDisposable
 
     public void Initialize()
     {
-        _gameView = _diContainer.InstantiatePrefabForComponent<GameView>(_settings.gameView);
         _levelModel.LoadData();
-        InitCurrentLevel().Forget();
+        InitCurrentLevel();
     }
 
 
-    public async UniTask InitCurrentLevel()
+    public void InitCurrentLevel()
     {
-        _gameView.Initialize();
+        _levelController.InitLevel();
+        _wordController.Init();
     }
 
 
@@ -45,11 +53,11 @@ public class ApplicationController : IInitializable, IDisposable
     {
         Dispose();
         _levelModel.CurrentLevel++;
-        InitCurrentLevel().Forget();
+        InitCurrentLevel();
     }
 
     public void Dispose()
     {
-        _gameView.Dispose();
+        _wordController.Dispose();
     }
 }

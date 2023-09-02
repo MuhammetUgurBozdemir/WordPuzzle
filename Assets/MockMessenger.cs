@@ -35,7 +35,7 @@ public class MockMessenger : MonoBehaviour
     {
         _levelModel.CurrentLevel = level;
         _applicationController.Dispose();
-        _applicationController.InitCurrentLevel().Forget();
+        _applicationController.InitCurrentLevel();
     }
 
     #endregion

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: GlobalSettingsInstaller
   m_EditorClassIdentifier: 
   settings:
+  - {fileID: 11400000, guid: d0c44393b61be43d09b29b38bc9b748e, type: 2}
   - {fileID: 11400000, guid: a5b6c43a8df0246b6aa46a31f1852e92, type: 2}
-  - {fileID: 11400000, guid: 056a04d86f17d43f19c7129a30512569, type: 2}

@@ -9,6 +9,10 @@ namespace Game.Scripts.Signals
             SignalBusInstaller.Install(Container);
            
             Container.DeclareSignal<LevelEndSignal>();
+            Container.DeclareSignal<TileClickedSignal>();
+            Container.DeclareSignal<SubmitButtonClicked>();
+            Container.DeclareSignal<UndoButtonClicked>();
+            Container.DeclareSignal<WordSubmittedSignal>();
         }
     }
 }

@@ -12,11 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c1d91a5603b84918ba815b8d86f2d1d, type: 3}
   m_Name: ApplicationSettings
   m_EditorClassIdentifier: 
-  enemyFacade: {fileID: 1332399030085982912, guid: 8149c836af8b2492bb8af8d66cf089d8,
-    type: 3}
-  platformView: {fileID: 4829463111817023482, guid: 4d79076c4154641338fb2ffc1378349e,
-    type: 3}
-  playerMovement: {fileID: 7836681907721150050, guid: 1a99a2bacf12c4934801ac42cde156df,
-    type: 3}
   gameView: {fileID: 1727068901991519805, guid: 54135dd8c30f84fc78925517bac08876,
+    type: 3}
+  tileView: {fileID: 7003505353720773045, guid: 16b3d4bce1836490b907019284896b7c,
     type: 3}

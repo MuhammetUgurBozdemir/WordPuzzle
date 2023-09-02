@@ -2,11 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EnemyState
+public enum TileState
 {
-    Idle = 0,
-    MoveToTarget = 1,
-    Death = 2,
-    Attack = 3,
-    Follow
+    Enable = 0,
+    Disable = 1,
+    Selected = 2,
 }

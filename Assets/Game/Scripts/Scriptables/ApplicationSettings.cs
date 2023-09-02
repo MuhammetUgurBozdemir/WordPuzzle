@@ -4,4 +4,5 @@ using UnityEngine;
 public class ApplicationSettings : ScriptableObject
 {
     public GameView gameView;
+    public TileView tileView;
 }

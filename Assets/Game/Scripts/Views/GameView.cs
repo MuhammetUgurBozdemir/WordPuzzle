@@ -12,13 +12,6 @@ public class GameView : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI scoreText;
-    [SerializeField] private TextMeshProUGUI healthText;
-
-    [SerializeField] private Button nextLevelButton;
-    [SerializeField] private Button retryButton;
-    [SerializeField] private Button playButton;
-    [SerializeField] private GameObject initialPanel;
-
 
     private SignalBus _signalBus;
     private LevelModel _levelModel;
@@ -45,6 +38,10 @@ public class GameView : MonoBehaviour
        
     }
 
+    public void Submit()
+    {
+        _signalBus.Fire<SubmitButtonClicked>();
+    }
   
 
     public void Dispose()
