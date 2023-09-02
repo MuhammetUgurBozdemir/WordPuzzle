@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e935b0309d7e4a099431c52609d622f, type: 3}
   m_Name: LibrarySettings
   m_EditorClassIdentifier: 
-  words: {fileID: 0}
+  words: {fileID: 4900000, guid: db3df714e839a424cb667a58c38f38a4, type: 3}
