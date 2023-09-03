@@ -10,6 +10,9 @@ using Zenject;
 
 public class GameView : MonoBehaviour
 {
+    
+    
+    
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI scoreText;
 
@@ -35,17 +38,20 @@ public class GameView : MonoBehaviour
 
     private void Init()
     {
-       
     }
 
     public void Submit()
     {
-        _signalBus.Fire<SubmitButtonClicked>();
+        _signalBus.Fire<SubmitButtonClickedSignal>();
+    }
+
+    public void Undo()
+    {
+        _signalBus.Fire<UndoButtonClickedSignal>();
     }
   
 
     public void Dispose()
     {
-       
     }
 }

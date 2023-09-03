@@ -12,6 +12,7 @@ namespace Game.Scripts.Enemy
             Container.Bind<TileDisableState>().AsSingle();
             Container.Bind<TileEnableState>().AsSingle();
             Container.Bind<TileSelectedState>().AsSingle();
+            Container.Bind<TileMoveToInitialState>().AsSingle();
         }
     }
 }

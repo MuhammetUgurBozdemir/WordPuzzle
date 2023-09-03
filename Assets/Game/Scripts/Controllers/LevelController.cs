@@ -15,13 +15,15 @@ namespace Game.Scripts.Controllers
         private SignalBus _signalBus;
         private LevelSettings _levelSettings;
         private TileFacade.Factory _factory;
+        private WordController _wordController;
 
         public LevelController(ApplicationSettings settings,
             LevelModel levelModel,
             DiContainer diContainer,
             SignalBus signalBus,
             LevelSettings levelSettings
-            ,TileFacade.Factory factory)
+            ,TileFacade.Factory factory,
+            WordController wordController)
         {
             _settings = settings;
             _levelModel = levelModel;
@@ -29,6 +31,7 @@ namespace Game.Scripts.Controllers
             _signalBus = signalBus;
             _levelSettings = levelSettings;
             _factory = factory;
+            _wordController = wordController;
         }
 
         #endregion
@@ -41,6 +44,7 @@ namespace Game.Scripts.Controllers
             foreach (TileData dataTile in data.tiles)
             {
                 _factory.Create(new TileFacade.Args(dataTile));
+                _wordController.allChars.Add(dataTile.character);
             }
         }
     }

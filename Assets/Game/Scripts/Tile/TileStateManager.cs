@@ -24,12 +24,14 @@ namespace Game.Scripts.Tile
 
         public TileStateManager(TileDisableState tileDisableState,
             TileEnableState tileEnableState,
-            TileSelectedState tileSelectedState)
+            TileSelectedState tileSelectedState,
+            TileMoveToInitialState tileMoveToInitialState)
         {
-            _states = new ITileState[3];
+            _states = new ITileState[4];
             _states[(int)TileState.Enable] = tileEnableState;
             _states[(int)TileState.Disable] = tileDisableState;
             _states[(int)TileState.Selected] = tileSelectedState;
+            _states[(int)TileState.MoveToInitialPosition] = tileMoveToInitialState;
         }
 
         public void Initialize()

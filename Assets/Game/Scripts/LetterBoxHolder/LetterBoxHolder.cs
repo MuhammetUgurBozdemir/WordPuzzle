@@ -13,6 +13,19 @@ public class LetterBoxHolder : MonoBehaviour
         var target = letterBoxes.FirstOrDefault(x => x.State == false);
         return target;
     }
+
+    public void MakeAvailableLastHolder()
+    {
+        letterBoxes.LastOrDefault(x=>x.State)!.State=false;
+    }
+
+    public void MakeAvailableAllBoxes()
+    {
+        foreach (var boxesAndStates in letterBoxes)
+        {
+            boxesAndStates.State = false;
+        }
+    }
 }
 
 

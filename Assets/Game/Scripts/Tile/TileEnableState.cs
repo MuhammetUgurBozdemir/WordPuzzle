@@ -34,7 +34,7 @@ namespace Game.Scripts.Tile
         public void OnClicked()
         {
             _tileFacade.SetStateSelected();
-            _signalBus.Fire(new TileClickedSignal(_tileFacade.tileData));
+            _signalBus.Fire(new TileClickedSignal(_tileFacade));
         }
     }
 }

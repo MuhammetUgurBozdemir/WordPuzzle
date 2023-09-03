@@ -1,4 +1,5 @@
 using Game.Scripts.Scriptables;
+using Game.Scripts.Tile;
 
 public readonly struct LevelEndSignal
 {
@@ -6,22 +7,32 @@ public readonly struct LevelEndSignal
 
 public readonly struct TileClickedSignal
 {
-    public readonly TileData TileData;
+    public readonly TileFacade TileFacade;
 
-    public TileClickedSignal(TileData tileData)
+    public TileClickedSignal(TileFacade tileFacde)
     {
-        TileData = tileData;
+        TileFacade = tileFacde;
     }
 }
 
-public readonly struct SubmitButtonClicked
+public readonly struct SubmitButtonClickedSignal
 {
     
 }
 
-public readonly struct UndoButtonClicked
+public readonly struct UndoButtonClickedSignal
 {
-    
+ 
+}
+
+public readonly struct TileRemovedFromSubmittedSignal
+{
+    public readonly TileFacade TileFacade;
+
+    public TileRemovedFromSubmittedSignal(TileFacade tileFacde)
+    {
+        TileFacade = tileFacde;
+    }
 }
 
 public readonly struct WordSubmittedSignal

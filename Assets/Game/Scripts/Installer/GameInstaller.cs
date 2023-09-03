@@ -30,6 +30,7 @@ public class GameInstaller : MonoInstaller
         Container.BindInterfacesAndSelfTo<ApplicationController>().AsSingle();
         Container.BindInterfacesAndSelfTo<LevelController>().AsSingle();
         Container.BindInterfacesAndSelfTo<WordController>().AsSingle();
+        
 
         InstallTiles();
     }

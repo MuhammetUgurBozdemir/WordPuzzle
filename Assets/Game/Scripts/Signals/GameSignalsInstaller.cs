@@ -10,9 +10,10 @@ namespace Game.Scripts.Signals
            
             Container.DeclareSignal<LevelEndSignal>();
             Container.DeclareSignal<TileClickedSignal>();
-            Container.DeclareSignal<SubmitButtonClicked>();
-            Container.DeclareSignal<UndoButtonClicked>();
+            Container.DeclareSignal<SubmitButtonClickedSignal>();
+            Container.DeclareSignal<UndoButtonClickedSignal>();
             Container.DeclareSignal<WordSubmittedSignal>();
+            Container.DeclareSignal<TileRemovedFromSubmittedSignal>();
         }
     }
 }

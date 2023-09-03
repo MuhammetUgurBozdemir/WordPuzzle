@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        PlayerPrefs.SetInt("CurrentLevel" , _levelModel.CurrentLevel);
-        PlayerPrefs.SetInt("Score" , _levelModel.Score);
+        // PlayerPrefs.SetInt("CurrentLevel", _levelModel.CurrentLevel);
+        // PlayerPrefs.SetInt("Score", _levelModel.Score);
     }
 }
