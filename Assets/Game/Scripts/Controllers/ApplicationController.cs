@@ -42,15 +42,6 @@ public class ApplicationController : IInitializable, IDisposable
         // _levelController.InitLevel();
         _wordController.Init();
     }
-
-
-    public void InitNextLevel()
-    {
-        Dispose();
-        _levelModel.CurrentLevel++;
-        InitCurrentLevel();
-    }
-
     public void Dispose()
     {
         _wordController.Dispose();

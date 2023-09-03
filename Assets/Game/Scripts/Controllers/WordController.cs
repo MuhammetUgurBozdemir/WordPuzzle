@@ -15,6 +15,8 @@ namespace Game.Scripts.Controllers
         private List<TileFacade> _submittedChars = new List<TileFacade>();
         public List<string> allChars = new List<string>();
 
+        private int tempScore;
+
         #region Injection
 
         private SignalBus _signalBus;
@@ -42,7 +44,7 @@ namespace Game.Scripts.Controllers
 
         public void Init()
         {
-            _signalBus.Subscribe<SubmitButtonClickedSignal>(CheckWordIsCompleted);
+            _signalBus.Subscribe<SubmitButtonClickedSignal>(WordSubmitClicked);
             _signalBus.Subscribe<TileClickedSignal>(AddClickedLetter);
             _signalBus.Subscribe<UndoButtonClickedSignal>(RemoveClickedLetter);
 
@@ -54,20 +56,38 @@ namespace Game.Scripts.Controllers
         }
 
 
-        private void CheckWordIsCompleted()
+        private WordState CheckWordIsCompleted()
         {
             string word = _letters.Aggregate("", (current, s) => current + (s));
             var result = _dictionary.Contains(word.ToLower());
 
-            if (!result) return;
-            
-            _signalBus.Fire(new WordSubmittedSignal(word));
+            WordState wordState = new WordState
+            {
+                word = word,
+                state = result
+            };
+
+            _gameView.SetSubmitButtonVisibility(result);
+
+            return wordState;
+        }
+
+        private void WordSubmitClicked()
+        {
+            var wordState = CheckWordIsCompleted();
+
+            if (!wordState.state) return;
+
+            _signalBus.Fire(new WordSubmittedSignal(wordState.word));
             _letterBoxHolder.MakeAvailableAllBoxes();
 
             foreach (var letter in _letters)
             {
                 allChars.Remove(letter);
             }
+
+            _gameView.UpdateScoreView(CalculateScore());
+            tempScore += CalculateScore();
 
             _letters.Clear();
             CheckForLevelAnd();
@@ -85,16 +105,19 @@ namespace Game.Scripts.Controllers
         {
             _letters.Add(signal.TileFacade.tileData.character);
             _submittedChars.Add(signal.TileFacade);
+            CheckWordIsCompleted();
         }
 
         private void RemoveClickedLetter()
         {
+            if (_letters.Count == 0) return;
             if (_submittedChars.Count == 0) return;
 
             _submittedChars[^1].SetStateMoveToInitialPos();
             _signalBus.Fire(new TileRemovedFromSubmittedSignal(_submittedChars[^1]));
             _submittedChars.RemoveAt(_submittedChars.Count - 1);
             _letters.RemoveAt(_letters.Count - 1);
+            CheckWordIsCompleted();
         }
 
         private bool CheckForLevelAnd()
@@ -116,16 +139,33 @@ namespace Game.Scripts.Controllers
                 else tempList.Clear();
             }
 
+            ES3.Save("Level" + _levelModel.CurrentLevel, tempScore);
+
+            tempScore = 0;
+
+            if (_levelModel.CurrentLevel == _levelModel.ReachedLevel)
+            {
+                _levelModel.ReachedLevel++;
+                ES3.Save("ReachedLevel", _levelModel.ReachedLevel);
+            }
+
             _signalBus.Fire<LevelEndSignal>();
             _gameView.ShowMainView();
+
             return true;
         }
 
         public void Dispose()
         {
-            _signalBus.Unsubscribe<SubmitButtonClickedSignal>(CheckWordIsCompleted);
+            _signalBus.Unsubscribe<SubmitButtonClickedSignal>(WordSubmitClicked);
             _signalBus.Unsubscribe<TileClickedSignal>(AddClickedLetter);
             _signalBus.Unsubscribe<UndoButtonClickedSignal>(RemoveClickedLetter);
         }
     }
+}
+
+public class WordState
+{
+    public string word;
+    public bool state;
 }

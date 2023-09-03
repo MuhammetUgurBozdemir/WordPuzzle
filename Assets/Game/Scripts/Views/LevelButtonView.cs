@@ -16,24 +16,40 @@ public class LevelButtonView : MonoBehaviour
 
     private LevelController _levelController;
     private MainView _mainView;
+    private LevelModel _levelModel;
 
     [Inject]
     private void Construct(LevelController levelController,
-        [Inject(Id = "MainView")] MainView mainView)
+        [Inject(Id = "MainView")] MainView mainView,
+        LevelModel levelModel)
     {
         _levelController = levelController;
         _mainView = mainView;
+        _levelModel = levelModel;
     }
 
-    public void Init(string title, int score, int index)
+    public void Init(string title, int index)
     {
         levelText.text = title;
         _index = index;
+
+        if (_levelModel.ReachedLevel < index)
+        {
+            disablePanel.gameObject.SetActive(true);
+        }
+
+        var score = ES3.Load("Level" + index, 0);
+        
+        scoreText.text = "Score: " + score;
     }
 
     public void InitLevel()
     {
-        // if (!disablePanel.gameObject.activeSelf)
+        if (disablePanel.gameObject.activeSelf) return;
+        
+        _levelModel.CurrentLevel = _index;
+        ES3.Save("CurrentLevel", _levelModel.CurrentLevel);
+        
         _levelController.InitLevel(_index);
         _mainView.gameObject.SetActive(false);
     }

@@ -12,6 +12,7 @@ public class GameView : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private GameObject submitButton;
 
     private SignalBus _signalBus;
     private LevelModel _levelModel;
@@ -29,14 +30,13 @@ public class GameView : MonoBehaviour
 
     public void Init(string title)
     {
-        _signalBus.Subscribe<WordSubmittedSignal>(UpdateScoreView);
-        scoreText.text = _levelModel.Score.ToString();
         levelText.text = title;
+        scoreText.text = 0.ToString();
     }
 
-    private void UpdateScoreView()
+    public void UpdateScoreView(int score)
     {
-        scoreText.text = _levelModel.Score.ToString();
+        scoreText.text = (Convert.ToInt16(scoreText.text) + score).ToString();
     }
 
     public void Submit()
@@ -44,6 +44,10 @@ public class GameView : MonoBehaviour
         _signalBus.Fire<SubmitButtonClickedSignal>();
     }
 
+    public void SetSubmitButtonVisibility(bool state)
+    {
+        submitButton.SetActive(state);
+    }
     public void Undo()
     {
         _signalBus.Fire<UndoButtonClickedSignal>();
@@ -57,8 +61,9 @@ public class GameView : MonoBehaviour
 
     private void Dispose()
     {
-        _signalBus.Unsubscribe<WordSubmittedSignal>(UpdateScoreView);
+        _mainView.Dispose();
         _mainView.gameObject.SetActive(true);
+        _mainView.Init();
         gameObject.SetActive(false);
     }
 }

@@ -5,11 +5,11 @@ using UnityEngine;
 public class LevelModel
 {
     public int CurrentLevel;
-    public int Score;
+    public int ReachedLevel;
 
     public void LoadData()
     {
-        CurrentLevel = PlayerPrefs.GetInt("CurrentLevel");
-        Score = PlayerPrefs.GetInt("Score");
+        CurrentLevel = ES3.Load("CurrentLevel", 0);
+        ReachedLevel = ES3.Load("ReachedLevel", 0);
     }
 }

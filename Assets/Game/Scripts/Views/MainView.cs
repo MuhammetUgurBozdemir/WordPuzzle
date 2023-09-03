@@ -9,6 +9,8 @@ public class MainView : MonoBehaviour
 {
     [SerializeField] private Transform container;
 
+    private List<LevelButtonView> _buttonViews= new List<LevelButtonView>();
+
     private LevelSettings _levelSettings;
     private DiContainer _diContainer;
     private ApplicationSettings _applicationSettings;
@@ -32,10 +34,21 @@ public class MainView : MonoBehaviour
             data = JsonUtility.FromJson<Level>(_levelSettings.levels[i].ToString());
             LevelButtonView levelButtonView = _diContainer.InstantiatePrefabForComponent<LevelButtonView>(
                 _applicationSettings.levelButtonView);
+
+            _buttonViews.Add(levelButtonView);
             
             levelButtonView.transform.SetParent(container);
 
-            levelButtonView.Init(data.title, i, i);
+            levelButtonView.Init(data.title, i);
         }
+    }
+
+    public void Dispose()
+    {
+        foreach (LevelButtonView levelButtonView in _buttonViews)
+        {
+            Destroy(levelButtonView.gameObject);
+        }
+        _buttonViews.Clear();
     }
 }

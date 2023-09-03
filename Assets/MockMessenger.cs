@@ -17,25 +17,13 @@ public class MockMessenger : MonoBehaviour
         _levelModel = levelModel;
         _applicationController = applicationController;
     }
-   
+
     #region DeleteUserPrefs
 
     [Button, FoldoutGroup("UserPrefs")]
     private void DeletePrefs()
     {
-       PlayerPrefs.DeleteAll();
-    }
-
-    #endregion
-    
-    #region SetSpecificLevel
-    
-    [Button, FoldoutGroup("SetLevel")]
-    private void SetLevel(int level)
-    {
-        _levelModel.CurrentLevel = level;
-        _applicationController.Dispose();
-        _applicationController.InitCurrentLevel();
+        PlayerPrefs.DeleteAll();
     }
 
     #endregion
