@@ -16,3 +16,5 @@ MonoBehaviour:
     type: 3}
   tileView: {fileID: 7003505353720773045, guid: 16b3d4bce1836490b907019284896b7c,
     type: 3}
+  levelButtonView: {fileID: 3029466519118458612, guid: 2f6426a28ceb24398a35185d3dd979b9,
+    type: 3}
