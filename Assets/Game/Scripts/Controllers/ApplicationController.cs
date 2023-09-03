@@ -6,30 +6,24 @@ using Zenject;
 
 public class ApplicationController : IInitializable, IDisposable
 {
-    private GameView _gameView;
+    
 
     #region Injection
 
-    private readonly ApplicationSettings _settings;
     private readonly LevelModel _levelModel;
-    private DiContainer _diContainer;
-    private SignalBus _signalBus;
     private LevelController _levelController;
     private WordController _wordController;
+    private MainView _mainView;
 
-    public ApplicationController(ApplicationSettings settings,
-        LevelModel levelModel,
-        DiContainer diContainer,
-        SignalBus signalBus,
+    public ApplicationController(LevelModel levelModel,
         LevelController levelController,
-        WordController wordController)
+        WordController wordController,
+        [Inject(Id = "MainView")] MainView mainView)
     {
-        _settings = settings;
         _levelModel = levelModel;
-        _diContainer = diContainer;
-        _signalBus = signalBus;
         _levelController = levelController;
         _wordController = wordController;
+        _mainView = mainView;
     }
 
     #endregion
@@ -39,12 +33,13 @@ public class ApplicationController : IInitializable, IDisposable
     {
         _levelModel.LoadData();
         InitCurrentLevel();
+        _mainView.Init();
     }
 
 
     public void InitCurrentLevel()
     {
-        _levelController.InitLevel();
+        // _levelController.InitLevel();
         _wordController.Init();
     }
 

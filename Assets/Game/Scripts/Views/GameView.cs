@@ -10,34 +10,33 @@ using Zenject;
 
 public class GameView : MonoBehaviour
 {
-    
-    
-    
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI scoreText;
 
     private SignalBus _signalBus;
     private LevelModel _levelModel;
-    private ApplicationController _applicationController;
+    private MainView _mainView;
 
     [Inject]
     private void Construct(SignalBus signalBus,
         LevelModel levelModel,
-        ApplicationController applicationController)
+        [Inject(Id = "MainView")] MainView mainView)
     {
         _signalBus = signalBus;
         _levelModel = levelModel;
-        _applicationController = applicationController;
+        _mainView = mainView;
     }
 
-    public void Initialize()
+    public void Init(string title)
     {
-       
-        
+        _signalBus.Subscribe<WordSubmittedSignal>(UpdateScoreView);
+        scoreText.text = _levelModel.Score.ToString();
+        levelText.text = title;
     }
 
-    private void Init()
+    private void UpdateScoreView()
     {
+        scoreText.text = _levelModel.Score.ToString();
     }
 
     public void Submit()
@@ -49,9 +48,17 @@ public class GameView : MonoBehaviour
     {
         _signalBus.Fire<UndoButtonClickedSignal>();
     }
-  
 
-    public void Dispose()
+    public void ShowMainView()
     {
+        Dispose();
+    }
+
+
+    private void Dispose()
+    {
+        _signalBus.Unsubscribe<WordSubmittedSignal>(UpdateScoreView);
+        _mainView.gameObject.SetActive(true);
+        gameObject.SetActive(false);
     }
 }

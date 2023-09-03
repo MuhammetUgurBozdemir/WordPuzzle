@@ -1,18 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
+using Game.Scripts.Controllers;
+using Game.Scripts.Scriptables;
 using UnityEngine;
+using Zenject;
 
 public class MainView : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private Transform container;
+
+    private LevelSettings _levelSettings;
+    private DiContainer _diContainer;
+    private ApplicationSettings _applicationSettings;
+
+    [Inject]
+    private void Construct(LevelSettings levelSettings,
+        DiContainer diContainer,
+        ApplicationSettings applicationSettings)
     {
-        
+        _levelSettings = levelSettings;
+        _diContainer = diContainer;
+        _applicationSettings = applicationSettings;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Init()
     {
-        
+        Level data = new Level();
+
+        for (int i = 0; i < _levelSettings.levels.Length; i++)
+        {
+            data = JsonUtility.FromJson<Level>(_levelSettings.levels[i].ToString());
+            LevelButtonView levelButtonView = _diContainer.InstantiatePrefabForComponent<LevelButtonView>(
+                _applicationSettings.levelButtonView);
+            
+            levelButtonView.transform.SetParent(container);
+
+            levelButtonView.Init(data.title, i, i);
+        }
     }
 }

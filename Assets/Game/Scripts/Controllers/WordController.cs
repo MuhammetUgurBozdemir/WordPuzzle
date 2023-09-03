@@ -18,17 +18,23 @@ namespace Game.Scripts.Controllers
         #region Injection
 
         private SignalBus _signalBus;
-        private LibrarySettings _librarySettings;
+        private DictionarySettings _dictionarySettings;
         private LetterBoxHolder _letterBoxHolder;
+        private LevelModel _levelModel;
+        private GameView _gameView;
 
         [Inject]
         private void Construct(SignalBus signalBus,
-            LibrarySettings librarySettings,
-            [Inject(Id = "LetterBoxHolder")] LetterBoxHolder letterBoxHolder)
+            DictionarySettings dictionarySettings,
+            [Inject(Id = "LetterBoxHolder")] LetterBoxHolder letterBoxHolder,
+            LevelModel levelModel,
+            [Inject(Id = "GameView")] GameView gameView)
         {
             _signalBus = signalBus;
-            _librarySettings = librarySettings;
+            _dictionarySettings = dictionarySettings;
             _letterBoxHolder = letterBoxHolder;
+            _levelModel = levelModel;
+            _gameView = gameView;
         }
 
         #endregion
@@ -40,7 +46,7 @@ namespace Game.Scripts.Controllers
             _signalBus.Subscribe<TileClickedSignal>(AddClickedLetter);
             _signalBus.Subscribe<UndoButtonClickedSignal>(RemoveClickedLetter);
 
-            foreach (string s in _librarySettings.words.text.Split(new[] { Environment.NewLine },
+            foreach (string s in _dictionarySettings.words.text.Split(new[] { Environment.NewLine },
                          StringSplitOptions.None))
             {
                 _dictionary.Add(s);
@@ -50,22 +56,29 @@ namespace Game.Scripts.Controllers
 
         private void CheckWordIsCompleted()
         {
-            string  word = _letters.Aggregate("", ( current, s) => current + (s));
+            string word = _letters.Aggregate("", (current, s) => current + (s));
             var result = _dictionary.Contains(word.ToLower());
 
-            if (result)
+            if (!result) return;
+            
+            _signalBus.Fire(new WordSubmittedSignal(word));
+            _letterBoxHolder.MakeAvailableAllBoxes();
+
+            foreach (var letter in _letters)
             {
-                _signalBus.Fire(new WordSubmittedSignal(word));
-                _letterBoxHolder.MakeAvailableAllBoxes();
-                
-                foreach (var letter in _letters)
-                {
-                    allChars.Remove(letter);
-                }
-                
-                _letters.Clear();
-                CheckForLevelAnd();
+                allChars.Remove(letter);
             }
+
+            _letters.Clear();
+            CheckForLevelAnd();
+        }
+
+        private int CalculateScore()
+        {
+            int totalLetterPoint = _letters.Sum(t =>
+                _dictionarySettings.LetterDatas
+                    .Find(x => String.Equals(x.Letter, t, StringComparison.CurrentCultureIgnoreCase)).Point);
+            return _letters.Count * totalLetterPoint * 10;
         }
 
         private void AddClickedLetter(TileClickedSignal signal)
@@ -90,13 +103,7 @@ namespace Game.Scripts.Controllers
 
             foreach (var s in _dictionary)
             {
-                foreach (var letter in allChars)
-                {
-                    if (s.Contains(letter.ToLower()))
-                    {
-                        tempList.Add(letter);
-                    }
-                }
+                tempList.AddRange(allChars.Where(letter => s.Contains(letter.ToLower())));
 
                 if (s.Length > 0)
                 {
@@ -110,6 +117,7 @@ namespace Game.Scripts.Controllers
             }
 
             _signalBus.Fire<LevelEndSignal>();
+            _gameView.ShowMainView();
             return true;
         }
 

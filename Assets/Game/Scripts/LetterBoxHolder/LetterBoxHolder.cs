@@ -16,6 +16,7 @@ public class LetterBoxHolder : MonoBehaviour
 
     public void MakeAvailableLastHolder()
     {
+        if(letterBoxes[0].State==false) return;
         letterBoxes.LastOrDefault(x=>x.State)!.State=false;
     }
 

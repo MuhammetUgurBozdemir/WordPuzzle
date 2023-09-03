@@ -13,8 +13,6 @@ namespace Game.Scripts.Scriptables
     {
         public string title;
         public List<TileData> tiles;
-        public int highScore = 0;
-        public bool isLocked = true;
     }
     
     [System.Serializable]

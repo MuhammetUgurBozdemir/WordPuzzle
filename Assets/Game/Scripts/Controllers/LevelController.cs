@@ -16,6 +16,7 @@ namespace Game.Scripts.Controllers
         private LevelSettings _levelSettings;
         private TileFacade.Factory _factory;
         private WordController _wordController;
+        private GameView _gameView;
 
         public LevelController(ApplicationSettings settings,
             LevelModel levelModel,
@@ -23,7 +24,8 @@ namespace Game.Scripts.Controllers
             SignalBus signalBus,
             LevelSettings levelSettings
             ,TileFacade.Factory factory,
-            WordController wordController)
+            WordController wordController,
+            [Inject(Id = "GameView")] GameView gameView)
         {
             _settings = settings;
             _levelModel = levelModel;
@@ -32,20 +34,24 @@ namespace Game.Scripts.Controllers
             _levelSettings = levelSettings;
             _factory = factory;
             _wordController = wordController;
+            _gameView = gameView;
         }
 
         #endregion
 
-        public void InitLevel()
+        public void InitLevel(int index)
         {
             Level data = new Level();
-            data = JsonUtility.FromJson<Level>(_levelSettings.levels[_levelModel.CurrentLevel].ToString());
+            data = JsonUtility.FromJson<Level>(_levelSettings.levels[index].ToString());
             
             foreach (TileData dataTile in data.tiles)
             {
                 _factory.Create(new TileFacade.Args(dataTile));
                 _wordController.allChars.Add(dataTile.character);
             }
+
+            _gameView.gameObject.SetActive(true);
+            _gameView.Init(data.title);
         }
     }
     
